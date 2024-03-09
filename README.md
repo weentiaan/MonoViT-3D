@@ -12,32 +12,28 @@ pip install timm einops IPython
 ```
 We ran our experiments with PyTorch 1.9.0, CUDA 11.1, Python 3.7 and Ubuntu 18.04.
 
-Note that our code is built based on [Monodepth2](https://github.com/nianticlabs/monodepth2),and[MonoViT](https://github.com/zxcqlf/MonoViT)
+Note that our code is built based on [Monodepth2](https://github.com/nianticlabs/monodepth2), and [MonoViT](https://github.com/zxcqlf/MonoViT)
 
-## Models
+## MonoViT-3D Models
+[`MonoViT-3D mono_640x192`](https://drive.google.com/drive/folders/1PBzqv8lqacdLNPLFsKrzwTnd8-d__nlR?usp=sharing)
+[`MonoViT-3D mono+stereo_640x192`](https://drive.google.com/drive/folders/1i6xRWc3gZ_1uKe1rqWt7KD_xAFSMVSSA?usp=sharing)
+[`MonoViT-3D mono_1024x320`](https://drive.google.com/drive/folders/140WhmjS4mxh0zggGBL-pavOgd0hkLtX0?usp=sharing)
+[`MonoViT-3D mono+stereo_1024x320`](https://drive.google.com/drive/folders/177D41NpG3Nx5pC2TXTHecFMKPbpTb-ot?usp=sharing)
 
 ## Results on KITTI
 
-We provide the following options for `--model_name`:
+![image-20240309151147784](./assets/image-20240309151147784.png)
 
-| `--model_name`                                               | Training modality | Pretrained? | Model resolution | Abs Rel | Sq Rel | RMSE  | RMSE log | delta < 1.25 | delta < 1.25^2 | delta < 1.25^3 |
-| ------------------------------------------------------------ | ----------------- | ----------- | ---------------- | ------- | ------ | ----- | -------- | ------------ | -------------- | -------------- |
-| [`mono_640x192`](https://drive.google.com/drive/folders/1PBzqv8lqacdLNPLFsKrzwTnd8-d__nlR?usp=sharing) | Mono              | Yes         | 640 x 192        | 0.099   | 0.703  | 4.348 | 0.175    | 0.901        | 0.967          | 0.984          |
-| [`mono+stereo_640x192`](https://drive.google.com/drive/folders/1i6xRWc3gZ_1uKe1rqWt7KD_xAFSMVSSA?usp=sharing) | Mono + Stereo     | Yes         | 640 x 192        | 0.096   | 0.688  | 4.286 | 0.172    | 0.906        | 0.967          | 0.984          |
-| [`mono_1024x320`](https://drive.google.com/drive/folders/140WhmjS4mxh0zggGBL-pavOgd0hkLtX0?usp=sharing) | Mono              | Yes         | 1024 x 320       | 0.095   | 0.691  | 4.243 | 0.171    | 0.909        | 0.969          | 0.984          |
-| [`mono+stereo_1024x320`](https://drive.google.com/drive/folders/177D41NpG3Nx5pC2TXTHecFMKPbpTb-ot?usp=sharing) | Mono + Stereo     | Yes         | 1024 x 320       | 0.093   | 0.683  | 4.223 | 0.170    | 0.915        | 0.969          | 0.984          |
+
+## Result on MAKE 3D
+
+![image-20240309150951350](./assets/image-20240309150951350.png)
 
 ## Method
 
 ![image-20240305123652796](./assets/image-20240305123652796.png)
 
 ![image-20240305123702432](./assets/image-20240305123702432.png)
-
-## Results on KITTI and MAKE3D
-
-![image-20240305123725262](./assets/image-20240305123725262.png)
-
-![image-20240305123735493](./assets/image-20240305123735493.png)
 
 
 
@@ -162,13 +158,11 @@ The three different values possible for `eval_split` are explained here:
 | **`eigen_benchmark`** | 652           | `--split eigen_zhou` (default) or `--split eigen_full`  | Evaluate with the improved ground truth from the [new KITTI depth benchmark](http://www.cvlibs.net/datasets/kitti/eval_depth.php?benchmark=depth_prediction) |
 | **`benchmark`**       | 500           | `--split benchmark`        | The [new KITTI depth benchmark](http://www.cvlibs.net/datasets/kitti/eval_depth.php?benchmark=depth_prediction) test files. |
 
-## MAKE 3D evaluation
-
-Use the test_make_3D.py
-
 ## Acknowledgement
 Thanks the authors for their works:
+
 [MonoViT](https://github.com/zxcqlf/MonoViT)
+
 [Monodepth2](https://github.com/nianticlabs/monodepth2)
 
 [MPVIT](https://github.com/youngwanLEE/MPViT)
