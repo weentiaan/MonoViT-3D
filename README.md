@@ -14,6 +14,19 @@ We ran our experiments with PyTorch 1.9.0, CUDA 11.1, Python 3.7 and Ubuntu 18.0
 
 Note that our code is built based on [Monodepth2](https://github.com/nianticlabs/monodepth2),and[MonoViT](https://github.com/zxcqlf/MonoViT)
 
+## Models
+
+## Results on KITTI
+
+We provide the following options for `--model_name`:
+
+| `--model_name`                                               | Training modality | Pretrained? | Model resolution | Abs Rel | Sq Rel | RMSE  | RMSE log | delta < 1.25 | delta < 1.25^2 | delta < 1.25^3 |
+| ------------------------------------------------------------ | ----------------- | ----------- | ---------------- | ------- | ------ | ----- | -------- | ------------ | -------------- | -------------- |
+| [`mono_640x192`](https://drive.google.com/drive/folders/1PBzqv8lqacdLNPLFsKrzwTnd8-d__nlR?usp=sharing) | Mono              | Yes         | 640 x 192        | 0.099   | 0.703  | 4.348 | 0.175    | 0.901        | 0.967          | 0.984          |
+| [`mono+stereo_640x192`](https://drive.google.com/drive/folders/1i6xRWc3gZ_1uKe1rqWt7KD_xAFSMVSSA?usp=sharing) | Mono + Stereo     | Yes         | 640 x 192        | 0.096   | 0.688  | 4.286 | 0.172    | 0.906        | 0.967          | 0.984          |
+| [`mono_1024x320`](https://drive.google.com/drive/folders/140WhmjS4mxh0zggGBL-pavOgd0hkLtX0?usp=sharing) | Mono              | Yes         | 1024 x 320       | 0.095   | 0.691  | 4.243 | 0.171    | 0.909        | 0.969          | 0.984          |
+| [`mono+stereo_1024x320`](https://drive.google.com/drive/folders/177D41NpG3Nx5pC2TXTHecFMKPbpTb-ot?usp=sharing) | Mono + Stereo     | Yes         | 1024 x 320       | 0.093   | 0.683  | 4.223 | 0.170    | 0.915        | 0.969          | 0.984          |
+
 ## Method
 
 ![image-20240305123652796](./assets/image-20240305123652796.png)
@@ -76,8 +89,50 @@ Because of the different torch version between MonoViT and Monodepth2, the func 
 By default models and tensorboard event files are saved to `./tmp/<model_name>`.
 This can be changed with the `--log_dir` flag.
 
+-------
+
+monodepth2/trainer.py，The Depth Model Definition section of the document (lines 54-62) is modified to read：
+
+       # self.models["encoder"] = networks.ResnetEncoder(
+        #    self.opt.num_layers, self.opt.weights_init == "pretrained")
+        self.models["encoder"] = networks.mpvit_small()
+        self.models["encoder"].num_ch_enc = [64,128,216,288,288]
+        self.models["encoder"].to(self.device)
+        #self.parameters_to_train += list(self.models["encoder"].parameters())
+     
+        self.models["depth"] = networks.DepthDecoder(
+            self.models["encoder"].num_ch_enc, self.opt.scales)
+        self.models["depth"].to(self.device)
+        self.parameters_to_train += list(self.models["depth"].parameters())
+Change the optimizer section (lines 102-104) to read：
+
+        self.params = [ {
+            "params":self.parameters_to_train, 
+            "lr": self.opt.learning_rate
+            #"weight_decay": 0.01
+            },
+            {
+            "params": list(self.models["encoder"].parameters()), 
+           "lr": self.opt.learning_rate/2
+            #"weight_decay": 0.01
+            } ]
+        self.model_optimizer = optim.AdamW(self.params)
+        self.model_lr_scheduler = optim.lr_scheduler.ExponentialLR(
+    	self.model_optimizer,0.9)
+Modifying a function
+
+```
+F.grid_sample(inputs[("color", frame_id, source_scale)],
+                    outputs[("sample", frame_id, scale)],
+                    padding_mode="border", align_corners=True)
+```
+
+-----
+
+Then, use this GitHub code to replace the python file.
 
 **Monocular training:**
+
 ```shell
 python trainer_3D.py --model_name mono_model --learning_rate 5e-5
 ```
@@ -85,16 +140,6 @@ python trainer_3D.py --model_name mono_model --learning_rate 5e-5
 **Monocular + stereo training:**
 ```shell
 python trainer_3D.py --model_name mono+stereo_model --use_stereo --learning_rate 5e-5
-```
-
-
-### GPUs
-
-The code of the Single GPU version can only be run on a single GPU.
-You can specify which GPU to use with the `CUDA_VISIBLE_DEVICES` environment variable:
-
-```shell
-CUDA_VISIBLE_DEVICES=1 python trainer_3D.py --model_name mono_model
 ```
 
 ## 📊 KITTI evaluation
