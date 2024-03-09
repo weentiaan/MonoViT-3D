@@ -16,8 +16,11 @@ Note that our code is built based on [Monodepth2](https://github.com/nianticlabs
 
 ## MonoViT-3D Models
 [`MonoViT-3D mono_640x192`](https://drive.google.com/drive/folders/1PBzqv8lqacdLNPLFsKrzwTnd8-d__nlR?usp=sharing)
+
 [`MonoViT-3D mono+stereo_640x192`](https://drive.google.com/drive/folders/1i6xRWc3gZ_1uKe1rqWt7KD_xAFSMVSSA?usp=sharing)
+
 [`MonoViT-3D mono_1024x320`](https://drive.google.com/drive/folders/140WhmjS4mxh0zggGBL-pavOgd0hkLtX0?usp=sharing)
+
 [`MonoViT-3D mono+stereo_1024x320`](https://drive.google.com/drive/folders/177D41NpG3Nx5pC2TXTHecFMKPbpTb-ot?usp=sharing)
 
 ## Results on KITTI
