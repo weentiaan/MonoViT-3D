@@ -147,7 +147,7 @@ To prepare the ground truth depth maps, please follow the monodepth2.
 
 ...assuming that you have placed the KITTI dataset in the default location of `./kitti_data/`.
 
-The following example command evaluates the epoch 19 weights of a model named `mono_model` (Note that please use `evaluate_depth.py` for 640x192 models and `evaluate_hr_depth.py --height 320/384 --width 1024/1280` for the others):
+The following example command evaluates the epoch 19 weights of a model named `mono_model` (Note that please use `evaluate_depth.py` for 640x192 models:
 ```shell
 python evaluate_depth.py --load_weights_folder ./tmp/mono_model/models/weights_19/ --eval_mono
 ```
