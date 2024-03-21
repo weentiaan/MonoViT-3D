@@ -1,5 +1,5 @@
 # MonoViT-3D
-
+**Please follow the Monodepth2 and the Mono-ViT process to prepare the project and then use our markdown to fulfill the project.**
 ## ⚙️ Setup
 
 Assuming a fresh [Anaconda](https://www.anaconda.com/download/) distribution, you can install the dependencies with:
